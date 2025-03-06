@@ -15,7 +15,7 @@ jobs:
         include:
           - backend: vulkan
             artifact_name: zed-release
-            rustflags: ""
+            rustflags: "-C opt-level=3 -C lto=fat -C codegen-units=1 -C target-feature=+avx,+sse4.2,+aes"
           - backend: opengl
             artifact_name: zed-release-opengl
             rustflags: "--cfg gles"
