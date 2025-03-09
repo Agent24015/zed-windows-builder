@@ -1,5 +1,5 @@
 [target."cfg(all())"]
-rustflags = []
+rustflags = ["-C", "opt-level=3"]
 
 [profile.release]
 debug = "none"
