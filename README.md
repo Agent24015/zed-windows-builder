@@ -29,23 +29,7 @@ scoop bucket add versions
 scoop install versions/zed-nightly
 ```
 
-## Vulkan doesn't work for you?
 
-Install the OpenGL version
-
-### Stable OpenGL version
-
-```pwsh
-scoop bucket add extras
-scoop install extras/zed-opengl
-```
-
-### Nightly OpenGL version
-
-```pwsh
-scoop bucket add versions
-scoop install versions/zed-opengl-nightly
-```
 
 ### For Windows 10 users
 
@@ -61,12 +45,8 @@ scoop install vcredist2022
 ```pwsh
 # Stable version
 scoop update zed
-# Stable OpenGL version
-scoop update zed-opengl
 # Nightly version
 scoop update zed-nightly
-# Nightly OpenGL version
-scoop update zed-opengl-nightly
 ```
 
 ## Is it safe?
@@ -79,7 +59,7 @@ See the [Zed homepage](https://zed.dev/) or [official repository](https://github
 
 The build process is designed to be robust and handle partial failures gracefully:
 
-- **Resilient Builds**: If one build variant (Vulkan or OpenGL) fails, the other will still complete and create a release
+- **Resilient Builds**: The build process ensures releases are created successfully
 - **Comprehensive Testing**: All build scripts are thoroughly tested with automated test suites
 - **Quality Assurance**: Each release includes SHA256 checksums for integrity verification
 

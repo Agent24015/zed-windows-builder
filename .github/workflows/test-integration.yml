@@ -29,13 +29,11 @@ jobs:
         run: |
           echo "Creating mock build artifacts to test integration..."
 
-          # Create artifacts directory structure like the real build would
-          mkdir -p artifacts/zed-release
-          mkdir -p artifacts/zed-release-opengl
+           # Create artifacts directory structure like the real build would
+           mkdir -p artifacts/zed-release
 
-          # Create mock executables
-          echo "mock vulkan zed executable content" > artifacts/zed-release/zed.exe
-          echo "mock opengl zed executable content" > artifacts/zed-release-opengl/zed.exe
+           # Create mock executables
+           echo "mock vulkan zed executable content" > artifacts/zed-release/zed.exe
 
           echo "Mock artifacts created:"
           Get-ChildItem -Path artifacts -Force | Format-List
@@ -46,11 +44,7 @@ jobs:
           name: zed-release
           path: artifacts/zed-release/zed.exe
 
-      - name: Upload mock OpenGL artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: zed-release-opengl
-          path: artifacts/zed-release-opengl/zed.exe
+
 
   test-release-integration:
     runs-on: ubuntu-latest
@@ -77,10 +71,7 @@ jobs:
             exit 1
           fi
 
-          if [ ! -f "artifacts/zed-release-opengl/zed.exe" ]; then
-            echo "❌ FAIL: OpenGL artifact not downloaded"
-            exit 1
-          fi
+
 
           echo "✅ All artifacts downloaded successfully"
 
@@ -95,7 +86,7 @@ jobs:
       - name: Verify release files
         run: |
           # Check that all expected files exist
-          EXPECTED_FILES=("zed.exe" "zed.zip" "zed-opengl.exe" "zed-opengl.zip" "sha256sums.txt")
+           EXPECTED_FILES=("zed.exe" "zed.zip" "sha256sums.txt")
 
           for file in "${EXPECTED_FILES[@]}"; do
             if [ ! -f "release/$file" ]; then
@@ -119,19 +110,15 @@ jobs:
 
     strategy:
       matrix:
-        scenario:
-          - name: "vulkan-only"
-            create_vulkan: true
-            create_opengl: false
-            expected_files: 3
-          - name: "opengl-only"
-            create_vulkan: false
-            create_opengl: true
-            expected_files: 3
-          - name: "both-builds"
-            create_vulkan: true
-            create_opengl: true
-            expected_files: 5
+         scenario:
+           - name: "vulkan-only"
+             create_vulkan: true
+             create_opengl: false
+             expected_files: 3
+           - name: "both-builds"
+             create_vulkan: true
+             create_opengl: true
+             expected_files: 3
 
     steps:
       - name: Checkout repository
@@ -147,11 +134,7 @@ jobs:
             echo "vulkan executable for ${{ matrix.scenario.name }}" > artifacts/zed-release/zed.exe
           fi
 
-          if [ "${{ matrix.scenario.create_opengl }}" = "true" ]; then
-            echo "Creating OpenGL artifacts..."
-            mkdir -p artifacts/zed-release-opengl
-            echo "opengl executable for ${{ matrix.scenario.name }}" > artifacts/zed-release-opengl/zed.exe
-          fi
+
 
           echo "Created artifacts:"
           find artifacts -type f -name "*.exe" -exec ls -la {} \; || echo "No artifacts created"

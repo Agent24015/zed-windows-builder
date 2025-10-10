@@ -25,10 +25,7 @@ create_vulkan_artifact() {
     echo "fake vulkan executable" > artifacts/zed-release/zed.exe
 }
 
-create_opengl_artifact() {
-    mkdir -p artifacts/zed-release-opengl
-    echo "fake opengl executable" > artifacts/zed-release-opengl/zed.exe
-}
+
 
 verify_file_exists() {
     local file="$1"
@@ -69,16 +66,13 @@ run_test() {
     fi
 }
 
-# Test 1: Both Vulkan and OpenGL builds exist
-setup_test "Both builds exist"
+# Test 1: Vulkan build exists
+setup_test "Vulkan build exists"
 create_vulkan_artifact
-create_opengl_artifact
 run_test "success"
-verify_file_count 5  # zed.exe, zed.zip, zed-opengl.exe, zed-opengl.zip, sha256sums.txt
+verify_file_count 3  # zed.exe, zed.zip, sha256sums.txt
 verify_file_exists "release/zed.exe"
 verify_file_exists "release/zed.zip"
-verify_file_exists "release/zed-opengl.exe"
-verify_file_exists "release/zed-opengl.zip"
 verify_file_exists "release/sha256sums.txt"
 
 # Test 2: Only Vulkan build exists
@@ -90,14 +84,7 @@ verify_file_exists "release/zed.exe"
 verify_file_exists "release/zed.zip"
 verify_file_exists "release/sha256sums.txt"
 
-# Test 3: Only OpenGL build exists
-setup_test "Only OpenGL build exists"
-create_opengl_artifact
-run_test "success"
-verify_file_count 3  # zed-opengl.exe, zed-opengl.zip, sha256sums.txt
-verify_file_exists "release/zed-opengl.exe"
-verify_file_exists "release/zed-opengl.zip"
-verify_file_exists "release/sha256sums.txt"
+
 
 # Test 4: No builds exist
 setup_test "No builds exist"
@@ -113,7 +100,6 @@ echo "✅ No release files created when no builds exist"
 # Test 5: Verify checksums are correct
 setup_test "Checksum verification"
 create_vulkan_artifact
-create_opengl_artifact
 run_test "success"
 
 # Verify checksums

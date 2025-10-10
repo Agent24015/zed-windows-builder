@@ -10,13 +10,8 @@ PowerShell script that processes Rust compilation flags for the build process.
 
 **Purpose:**
 - Parses Rust flags passed as arguments
-- Sets up the build environment for different backends (Vulkan/OpenGL)
+- Sets up the build environment for Vulkan backend
 - Configures conditional compilation flags in `.cargo/config.toml`
-
-**Usage:**
-```powershell
-./scripts/Parse-Rustflags.ps1 "--cfg gles"
-```
 
 **Requirements:**
 - PowerShell Core or Windows PowerShell
@@ -34,7 +29,6 @@ Main script that prepares release files from build artifacts. Handles partial bu
 **Features:**
 - Creates a `release/` directory for all output files
 - Processes Vulkan build (`zed.exe`) and creates zip if available
-- Processes OpenGL build (`zed-opengl.exe`) and creates zip if available
 - Generates SHA256 checksums for all release files
 - Fails fast if no build artifacts are found
 - Uses wildcards for clean file handling
@@ -46,11 +40,9 @@ Main script that prepares release files from build artifacts. Handles partial bu
 
 **Input:**
 - `artifacts/zed-release/zed.exe` (Vulkan build)
-- `artifacts/zed-release-opengl/zed.exe` (OpenGL build)
 
 **Output:**
 - `release/zed.exe` and `release/zed.zip` (if Vulkan build exists)
-- `release/zed-opengl.exe` and `release/zed-opengl.zip` (if OpenGL build exists)
 - `release/sha256sums.txt` (checksums for all files)
 
 **Requirements:**
@@ -66,9 +58,8 @@ Main script that prepares release files from build artifacts. Handles partial bu
 Comprehensive test suite for `prepare-release.sh` with full scenario coverage.
 
 **Test Scenarios:**
-- ✅ Both Vulkan and OpenGL builds present (5 files expected)
+- ✅ Vulkan build present (3 files expected)
 - ✅ Only Vulkan build present (3 files expected)
-- ✅ Only OpenGL build present (3 files expected)
 - ❌ No builds present (should fail with clear error)
 - ✅ Checksum validation (verify SHA256 accuracy)
 - ✅ Zip file content verification
@@ -131,9 +122,9 @@ The repository includes a `.actrc` file with optimal settings for testing:
 - **Script Logic**: All branches and error conditions
 - **File Handling**: Artifact processing and release file creation
 - **Checksums**: SHA256 verification of all files
-- **Partial Failures**: Vulkan-only, OpenGL-only, and both-builds scenarios
+- **Partial Failures**: Vulkan-only scenario
 - **Error Cases**: No artifacts present (should fail gracefully)
 
 ## Integration
 
-The `prepare-release.sh` script is used in the GitHub Actions workflow (`.github/workflows/release.yml`) to handle partial build failures gracefully. It ensures that releases are created even if only one of the two build variants (Vulkan or OpenGL) succeeds.
+The `prepare-release.sh` script is used in the GitHub Actions workflow (`.github/workflows/release.yml`) to handle partial build failures gracefully. It ensures that releases are created for the Vulkan build.
