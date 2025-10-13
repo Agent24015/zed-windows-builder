@@ -41,11 +41,9 @@ jobs:
         run: |
           echo "Testing script with mock artifacts..."
 
-          # Create mock artifacts
-          mkdir -p artifacts/zed-release
-          mkdir -p artifacts/zed-release-opengl
-          echo "mock vulkan executable" > artifacts/zed-release/zed.exe
-          echo "mock opengl executable" > artifacts/zed-release-opengl/zed.exe
+           # Create mock artifacts
+           mkdir -p artifacts/zed-release
+           echo "mock vulkan executable" > artifacts/zed-release/zed.exe
 
           # Run the script
           ./scripts/prepare-release.sh
@@ -56,20 +54,10 @@ jobs:
             exit 1
           fi
 
-          if [ ! -f "release/zed-opengl.exe" ]; then
-            echo "❌ FAIL: Missing zed-opengl.exe"
-            exit 1
-          fi
-
-          if [ ! -f "release/zed.zip" ]; then
-            echo "❌ FAIL: Missing zed.zip"
-            exit 1
-          fi
-
-          if [ ! -f "release/zed-opengl.zip" ]; then
-            echo "❌ FAIL: Missing zed-opengl.zip"
-            exit 1
-          fi
+           if [ ! -f "release/zed.zip" ]; then
+             echo "❌ FAIL: Missing zed.zip"
+             exit 1
+           fi
 
           if [ ! -f "release/sha256sums.txt" ]; then
             echo "❌ FAIL: Missing sha256sums.txt"
